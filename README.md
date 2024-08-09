@@ -2,28 +2,22 @@
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
-### What is this repository for? ###
+### How to configure the Chatbot
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+### Installing Python dependencies¶
 
-### How do I get set up? ###
+Next, we’ll create and activate a Python virtual environment in the source folder "ask-a-source":
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+### On Windows:
 
-### Contribution guidelines ###
+python -m venv venv
+venv\Scripts\activate.bat
 
-* Writing tests
-* Code review
-* Other guidelines
+### On Mac
 
-### Who do I talk to? ###
+python3 -m venv venv
+source venv/bin/activate
 
-* Repo owner or admin
-* Other community or team contact
+For this example, we’ll need to install two Python libraries: requests and python-dotenv.
+
+pip install requests python-dotenv

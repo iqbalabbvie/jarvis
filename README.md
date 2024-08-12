@@ -21,3 +21,15 @@ source venv/bin/activate
 For this example, we’ll need to install two Python libraries: requests and python-dotenv.
 
 pip install requests python-dotenv
+
+### Configure Streamlit UI Package
+
+navigate to "ask-a-source" open Terminal and run the below commands
+
+pip install streamlit
+
+streamlit hello
+
+streamlit run app.py
+
+You will see the Local host open the UI in the default browser

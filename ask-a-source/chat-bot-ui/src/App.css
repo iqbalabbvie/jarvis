@@ -132,7 +132,7 @@
   background-color: #cccccc;
 }
  
-.error {
+.error, .errorText {
   color: red;
   margin-top: 10px;
 }

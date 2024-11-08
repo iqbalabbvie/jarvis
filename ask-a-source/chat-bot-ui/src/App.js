@@ -29,7 +29,9 @@ function App() {
         setLoading(false);
       })
       .catch(error => {
-        setError(error);
+        let errorText = error.message +'. Unable to fetch the response for the request';
+        setConversation(prev => [...prev, { user: 'You', text: message}, { user: 'Server', text: '', errorText: errorText}]);
+        setMessage('');
         setLoading(false);
       });
   };
@@ -70,8 +72,8 @@ function App() {
                 className='message-logo'
             />
             <div className='message-content'>
-              <div>{msg.text}</div>
-              {msg.user === 'Server' && (
+              <div className = {`${msg.text ? 'responseText' : 'errorText'}`}>{msg.text || msg.errorText}</div>
+              {msg.user === 'Server' && msg.reference && (
                 <>
                 <a
                   href = '#'
@@ -90,6 +92,7 @@ function App() {
                 
               )}
             </div>
+            {error && <div className="error">Error: {error.message}</div>}
           </div>
         ))} 
         {loading && (
@@ -141,7 +144,6 @@ function App() {
         </div>
 
       )}
-      {error && <div className="error">Error: {error.message}</div>}
       </div>     
     </div>
 );

@@ -14,9 +14,13 @@ app = Flask(__name__, static_folder='chat-bot-ui/build', static_url_path='')
 CORS(app)
 
 # Environment variables
-ILIAD_KEY = os.getenv("ILIAD_API_KEY")
+ILIAD_KEY = os.getenv("ILIAD_API_KEY").strip('"')
 ILIAD_URL = "https://api-epic.ir-gateway.abbvienet.com/iliad"
-USER_TOKEN = os.getenv("USER_TOKEN")
+USER_TOKEN = os.getenv("USER_TOKEN").strip('"')
+
+# Log environment variables for debugging
+print("ILIAD_API_KEY:", repr(ILIAD_KEY))
+print("USER_TOKEN:", repr(USER_TOKEN))
 
 # Validate environment variables
 if not ILIAD_KEY or not USER_TOKEN:
@@ -40,10 +44,8 @@ def health():
 @app.route('/api/post-data', methods=['POST'])
 def post_data():
     try:
-        # Log raw request body for debugging
         print("Raw request body:", request.data)
 
-        # Safely decode JSON
         try:
             data = request.get_json(force=True)
         except Exception as json_error:
@@ -57,27 +59,32 @@ def post_data():
             print("Invalid input received.")
             return jsonify({'response': 'Invalid input'}), 400
 
+        headers = {
+            "x-api-key": ILIAD_KEY,
+            "x-user-token": USER_TOKEN
+        }
+
+        payload = {
+            "chat_model": "gpt-4o",
+            "messages": [{"role": "user", "content": user_input}],
+            "minimum_score": 0
+        }
+
         print("Sending request to Iliad API...")
+        print("Headers:", headers)
+        print("Payload:", payload)
+
         resp = requests.post(
             url=f"{ILIAD_URL}/api/v1/sources/my-new-source-admp/rag",
-            headers={
-                "x-api-key": ILIAD_KEY,
-                "x-user-token": USER_TOKEN
-            },
-            json={
-                "chat_model": "gpt-4o",
-                "messages": [{"role": "user", "content": user_input}],
-                "minimum_score": 0
-            }
+            headers=headers,
+            json=payload,
+            timeout=10
         )
 
         print("Iliad response status code:", resp.status_code)
         print("Iliad response body:", resp.text)
 
-        # Raise error if status code is not 2xx
         resp.raise_for_status()
-
-        # Return Iliad response
         return jsonify(resp.json())
 
     except requests.RequestException as e:

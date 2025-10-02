@@ -56,7 +56,7 @@ function App() {
     <div className="App">
       <div class="header">
         <img src= '/header-logo.png' alt = "Logo" className='header-logo' />
-        <h1 className="header-text">ADMP Jarvis</h1>
+        <h1 className="header-text">Knowledge Chatbot</h1>
         <button onClick={toggleConfig} className='config-toggle-btn'>
           &#x2699;
         </button>

@@ -19,7 +19,7 @@ function App() {
     setLoading(true);
  
     // Post the message to the Flask backend
-    axios.post('http://127.0.0.1:5000/api/post-data', { message })
+    axios.post('http://jarvis-api-app.aws-k8s-d/api/post-data', { message })
       .then(response => {
         let regex = /\[.*?\]/g;
         let responseText = response.data.content.replace(regex, '');

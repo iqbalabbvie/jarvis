@@ -1,0 +1,13 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy backend files
+COPY app.py script.py .env requirements.txt ./
+COPY files ./files
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 5000
+CMD ["python", "app.py"]

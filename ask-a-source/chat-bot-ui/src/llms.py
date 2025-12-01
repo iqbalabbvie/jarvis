@@ -279,7 +279,7 @@ def make_api_request(user_text, model, system, includellms, llmsfileref):
         }
         
         response = requests.post(
-            "http://127.0.0.1:5000/api/llmscheck",
+            "http://jarvis-api-app.aws-k8s-d.abbvienet.com/api/llmscheck",
             json=payload,
             timeout=90,
             headers={'Content-Type': 'application/json'}

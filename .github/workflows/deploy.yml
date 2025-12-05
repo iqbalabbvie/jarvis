@@ -1,0 +1,20 @@
+name: Jarvis Pipeline
+
+on:
+  push:
+    branches:
+      - feature/actions
+  workflow_dispatch:
+
+jobs:
+  test-job:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify runner is working
+        run: |
+          echo "Workflow triggered on branch: $GITHUB_REF"
+          echo "Runner is working correctly!"

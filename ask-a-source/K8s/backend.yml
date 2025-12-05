@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jarvis-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jarvis-backend
+  template:
+    metadata:
+      labels:
+        app: jarvis-backend
+    spec:
+      containers:
+        - name: backend
+          image: <MSR_IMAGE>
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jarvis-backend-service
+spec:
+  selector:
+    app: jarvis-backend
+  ports:
+    - port: 80
+      targetPort: 5000
+  type: ClusterIP

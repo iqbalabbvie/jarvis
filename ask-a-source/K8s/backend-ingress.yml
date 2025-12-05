@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jarvis-bot-engine
+spec:
+  ingressClassName: nginx-default
+  rules:
+    - host: jarvis-api-app.aws-k8s-d.abbvienet.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jarvis-bot-service
+                port:
+                  number: 5000

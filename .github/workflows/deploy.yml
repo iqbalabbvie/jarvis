@@ -3,7 +3,7 @@ name: Jarvis Pipeline
 on:
   push:
     branches:
-      - feature/actions
+      - feature/action
   workflow_dispatch:
 
 jobs:

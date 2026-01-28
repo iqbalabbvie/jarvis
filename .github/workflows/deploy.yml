@@ -1,20 +1,38 @@
-name: Jarvis Pipeline
+name: Deploy to MKE
 
 on:
   push:
     branches:
-      - feature/action
+      - "feature/*"   # run on all feature branches
   workflow_dispatch:
 
 jobs:
-  test-job:
-    runs-on: ubuntu-latest
-
+  deploy:
+    runs-on: self-hosted
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Verify runner is working
+      - name: Set up kubeconfig
         run: |
-          echo "Workflow triggered on branch: $GITHUB_REF"
-          echo "Runner is working correctly!"
+          echo "${{ secrets.KUBECONFIG_DATA }}" > $HOME/.kube/config
+
+      - name: Azure Container Registry login (MSR)
+        run: |
+          echo "${{ secrets.MSR_PASSWORD }}" | docker login msr.azurecr.io -u "${{ secrets.MSR_USERNAME }}" --password-stdin
+
+      - name: Update image tags for feature branch
+        run: |
+          BRANCH_NAME=${GITHUB_REF##*/}
+          sed -i "s|msr.azurecr.io/project/backend:.*|msr.azurecr.io/project/backend:${BRANCH_NAME}|" K8s/backend.yml
+          sed -i "s|msr.azurecr.io/project/frontend:.*|msr.azurecr.io/project/frontend:${BRANCH_NAME}|" K8s/frontend.yml
+
+      - name: Deploy backend
+        run: |
+          kubectl apply -f K8s/backend.yml
+          kubectl apply -f K8s/backend-ingress.yml
+
+      - name: Deploy frontend
+        run: |
+          kubectl apply -f K8s/frontend.yml
+          kubectl apply -f K8s/frontend-ingress.yml

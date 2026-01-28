@@ -15,17 +15,12 @@ jobs:
 
       - name: Set up kubeconfig
         run: |
+          mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG_DATA }}" > $HOME/.kube/config
 
       - name: Azure Container Registry login (MSR)
         run: |
           echo "${{ secrets.MSR_PASSWORD }}" | docker login msr.azurecr.io -u "${{ secrets.MSR_USERNAME }}" --password-stdin
-
-      - name: Update image tags for feature branch
-        run: |
-          BRANCH_NAME=${GITHUB_REF##*/}
-          sed -i "s|msr.azurecr.io/project/backend:.*|msr.azurecr.io/project/backend:${BRANCH_NAME}|" K8s/backend.yml
-          sed -i "s|msr.azurecr.io/project/frontend:.*|msr.azurecr.io/project/frontend:${BRANCH_NAME}|" K8s/frontend.yml
 
       - name: Deploy backend
         run: |
@@ -36,3 +31,4 @@ jobs:
         run: |
           kubectl apply -f K8s/frontend.yml
           kubectl apply -f K8s/frontend-ingress.yml
+

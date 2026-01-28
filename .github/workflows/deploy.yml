@@ -20,7 +20,7 @@ jobs:
 
       - name: Azure Container Registry login (MSR)
         run: |
-          echo "${{ secrets.MSR_PASSWORD }}" | docker login msr.azurecr.io -u "${{ secrets.MSR_USERNAME }}" --password-stdin
+          echo "${{ secrets.MSR_PASSWORD }}" | docker login msr-aws-d.abbvienet.com -u "${{ secrets.MSR_USERNAME }}" --password-stdin
 
       - name: Deploy backend
         run: |
